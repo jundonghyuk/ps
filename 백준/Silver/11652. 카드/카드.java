@@ -1,5 +1,4 @@
 
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -26,7 +25,7 @@ public class Main {
         long tempNum = arr.get(0);
         int tempCnt = 1;
         for (int i = 0; i < n - 1; i++) {
-//            tempNum = arr.get(i);
+            tempNum = arr.get(i);
             if (tempNum != arr.get(i + 1)) {
                 if (cnt < tempCnt) {
                     cnt = tempCnt;
@@ -35,7 +34,7 @@ public class Main {
                 } else {
                     tempCnt = 1;
                 }
-                tempNum = arr.get(i + 1);
+//                tempNum = arr.get(i + 1);
             } else {
                 tempCnt++;
             }
