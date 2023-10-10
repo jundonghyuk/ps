@@ -1,5 +1,3 @@
-
-
 import java.util.*;
 
 import java.io.BufferedReader;
@@ -8,7 +6,6 @@ import java.util.Arrays;
 
 public class Main {
 
-    static int[] dp2 = new int[10001];
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int t = Integer.parseInt(br.readLine());
@@ -28,7 +25,7 @@ public class Main {
             dp[i][2] = i / 2;
             int j = i;
             dp[i][3] = dp[i-3][1] + dp[i-3][2] + dp[i-3][3];
-//            while (j >= 3) {
+//            while (j > 3) {
 //                j -= 3;
 //                dp[i][3] += dp[j][2] + 1;
 //            }
@@ -42,26 +39,6 @@ public class Main {
                 sb.append('\n');
             }
         }
-        he();
-        for(int i = 1; i <= 10000; i++) {
-            if(dp2[i] != dp[i][1] + dp[i][2] + dp[i][3]) {
-                System.out.println("hello" + i);
-            }
-        }
-
         System.out.println(sb);
     }
-
-    public static void he() {
-        dp2[0] = 1;
-        dp2[1] = 1;
-        dp2[2] = 2;
-        dp2[3] = 3;
-        dp2[4] = 4;
-        dp2[5] = 5;
-        for(int i = 6; i <= 10000; i++) {
-            dp2[i] = dp2[i-1] + dp2[i-2] - dp2[i-3] + dp2[i-3] - dp2[i-4] - (dp2[i-5] - dp2[i-6]);
-        }
-    }
-
 }
