@@ -19,32 +19,18 @@ public class Main {
 
         for (int i = 0; i < N; i++) {
             int h = Integer.parseInt(br.readLine());
-            if(!dq.isEmpty() && dq.peekLast()[0] > h) {
-                sum++;
-                dq.addLast(new int[]{h, 1});
-            } else if(!dq.isEmpty() && dq.peekLast()[0] < h) {
-                while(!dq.isEmpty() && dq.peekLast()[0] < h) {
-                    sum++;
-                    dq.pollLast();
+            int cnt = 1;
+            while(!dq.isEmpty() && dq.peekLast()[0] <= h) {
+                if(dq.peekLast()[0] == h) {
+                    cnt += dq.peekLast()[1];
                 }
-                if(dq.isEmpty()) {
-                    dq.addLast(new int[]{h, 1});
-                } else {
-                    if(dq.peekLast()[0] == h) {
-                        sum += dq.size() == dq.peekLast()[1] ? dq.peekLast()[1] : dq.peekLast()[1] + 1;
-                        dq.addLast(new int[]{h, dq.peekLast()[1] + 1});
-                    } else {
-                        sum++;
-                        dq.addLast(new int[]{h, 1});
-                    }
-                }
-            } else if (!dq.isEmpty() && dq.peekLast()[0] == h) {
-                sum += dq.size() == dq.peekLast()[1] ? dq.peekLast()[1] : dq.peekLast()[1] + 1;
-                dq.addLast(new int[]{h, dq.peekLast()[1] + 1});
-            } else {
-                dq.addLast(new int[]{h, 1});
+                sum += dq.pollLast()[1];
             }
-//            System.out.println(sum);
+
+            if(!dq.isEmpty()) {
+                sum++;
+            }
+            dq.addLast(new int[]{h, cnt});
         }
         System.out.println(sum);
     }
