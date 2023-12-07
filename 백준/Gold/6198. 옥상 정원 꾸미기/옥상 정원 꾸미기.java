@@ -1,5 +1,4 @@
 
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
@@ -14,21 +13,14 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
         long sum = 0;
-        Deque<int[]> dq = new ArrayDeque<>();
+        Deque<Integer> dq = new ArrayDeque<>();
         for (int i = 1; i <= N; i++) {
             int height = Integer.parseInt(br.readLine());
-            if(dq.isEmpty()) {
-                dq.addLast(new int[]{height, i});
-                continue;
+            while(!dq.isEmpty() && dq.peekLast() <= height) {
+                dq.pollLast();
             }
-
-            while(!dq.isEmpty() && dq.peekLast()[0] <= height) {
-                sum += (i-1) - dq.pollLast()[1];
-            }
-            dq.addLast(new int[]{height, i});
-        }
-        while(!dq.isEmpty()) {
-            sum += N - dq.pollLast()[1];
+            sum += dq.size();
+            dq.addLast(height);
         }
         System.out.println(sum);
     }
