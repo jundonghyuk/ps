@@ -25,31 +25,31 @@ public class Main {
                 board[i] = Integer.parseInt(st.nextToken());
             }
             for (int i = 1; i <= N; i++ ) {
-                if(vis[i] > 0) {
+                if(vis[i] != 0) {
                     continue;
                 }
-                vis[i] = 1;
-                Queue<Integer> q = new LinkedList<>();
-                HashSet<Integer> set = new HashSet<>();
-                set.add(i);
-                q.add(i);
-                while (!q.isEmpty()) {
-                    int cur = q.poll();
-                    int next = board[cur];
-                    if(set.contains(next)) {
-                        cnt+= (vis[cur] - vis[next] + 1);
+                int cur = i;
+                vis[cur] = i;
+                while(true) {
+                    cur = board[cur];
+                    if(vis[cur] == i) {
+                        while(vis[cur] == i) {
+                            vis[cur] = -1;
+                            cur = board[cur];
+                        }
+                        break;
+                    } else if(vis[cur] != 0) {
                         break;
                     }
-
-                    if(vis[next] > 0) {
-                        break;
-                    }
-                    vis[next] = vis[cur] + 1;
-                    q.add(next);
-                    set.add(next);
+                    vis[cur] = i;
                 }
             }
-            System.out.println(N-cnt);
+            for(int i = 1; i <= N; i++) {
+                if(vis[i] != -1) {
+                    cnt++;
+                }
+            }
+            System.out.println(cnt);
             cnt = 0;
         }
     }
