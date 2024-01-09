@@ -2,126 +2,93 @@
 import java.util.Scanner;
 
 /*
-        1600 * 4 * 100 * 100
-        1. 스티커를 순서대로 보드에 대조
-        2. 스티커 회전해서 대조
-
+        1. 맞는지 확인
+        2. 회전
+        15:55 ~
  */
 public class Main {
 
-    static boolean[][] board;
+    static int ret;
     static int N, M, K;
-    static int[][] rc;
-    static boolean[] success;
-    static boolean[][][] sticker;
+    static int R, C;
+    static boolean[][] sticker = new boolean[15][15];
+    static boolean[][] board = new boolean[41][41];
 
     public static void main(String[] args) {
+
         Scanner sc = new Scanner(System.in);
         N = sc.nextInt();
         M = sc.nextInt();
         K = sc.nextInt();
-        board = new boolean[N][M];
-        success = new boolean[K];
-        rc = new int[K][2];
-        sticker = new boolean[K][10][10];
-        for (int i = 0; i < K; i++) {
-            int r = sc.nextInt();
-            int c = sc.nextInt();
-            rc[i] = new int[]{r, c};
-            for (int j = 0; j < r; j++) {
-                for (int k = 0; k < c; k++) {
-                    sticker[i][j][k] = sc.nextInt() == 1;
+
+        while (K-- > 0) {
+            R = sc.nextInt();
+            C = sc.nextInt();
+            for (int i = 0; i < R; i++) {
+                for (int j = 0; j < C; j++) {
+                    sticker[i][j] = sc.nextInt() == 1;
                 }
             }
-        }
-        for (int k = 0; k < K; k++) {
-            if (success[k]) continue;
-            boolean[][] stickerLocation = sticker[k];
-            int[] location = rc[k];
-            int xLength = location[0];
-            int yLength = location[1];
-            boolean successFlag = false;
-            for (int turn = 1; turn <= 4; turn++) {
-                for (int i = 0; i < N; i++) {
-                    for (int j = 0; j < M; j++) {
-                        int endXPos, endYPos, myR, myC;
-                        if (turn == 1) {
-                            endXPos = i + xLength - 1;
-                            endYPos = j + yLength - 1;
-                        } else if (turn == 2) {
-                            endXPos = i + yLength - 1;
-                            endYPos = j + xLength - 1;
-                        } else if (turn == 3) {
-                            endXPos = i + xLength - 1;
-                            endYPos = j + yLength - 1;
-                        } else {
-                            endXPos = i + yLength - 1;
-                            endYPos = j + xLength - 1;
-                        }
 
-                        if (endXPos <= N - 1 && endYPos <= M - 1) {
-                            successFlag = true;
-                            for (int r = i; r <= endXPos; r++) {
-                                for (int c = j; c <= endYPos; c++) {
-                                    if (turn == 1) {
-                                        myR = r - i;
-                                        myC = c - j;
-                                    } else if (turn == 2) {
-                                        myR = endYPos - c;
-                                        myC = r - i;
-                                    } else if (turn == 3) {
-                                        myR = endXPos - r;
-                                        myC = endYPos - c;
-                                    } else {
-                                        myR = c - j;
-                                        myC = endXPos - r;
-                                    }
-                                    if (stickerLocation[myR][myC] && board[r][c]) {
-                                        successFlag = false;
-                                    }
-                                }
-                            }
-                            if (successFlag) {
-                                for (int r = i; r <= endXPos; r++) {
-                                    for (int c = j; c <= endYPos; c++) {
-                                        if (turn == 1) {
-                                            myR = r - i;
-                                            myC = c - j;
-                                        } else if (turn == 2) {
-                                            myR = endYPos - c;
-                                            myC = r - i;
-                                        } else if (turn == 3) {
-                                            myR = endXPos - r;
-                                            myC = endYPos - c;
-                                        } else {
-                                            myR = c - j;
-                                            myC = endXPos - r;
-                                        }
-                                        if (stickerLocation[myR][myC]) {
-                                            board[r][c] = true;
-                                        }
-                                    }
-                                }
-                                success[k] = true;
-                                break;
-                            }
+            for (int turn = 0; turn < 4; turn++) {
+                boolean success = false;
+                for (int i = 0; i <= N - R; i++) {
+                    for (int j = 0; j <= M - C; j++) {
+                        if (isMatch(i, j)) {
+                            success = true;
+                            break;
                         }
                     }
-                    if (successFlag) {
+                    if (success) {
                         break;
                     }
                 }
-                if (successFlag) break;
+                if (success) {
+                    break;
+                } else {
+                    rotate();
+                }
             }
         }
-        int cnt = 0;
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
-                if (board[i][j]) cnt++;
-//                System.out.print((board[i][j] ? 1 : 0) + " ");
+        System.out.println(ret);
+    }
+
+    public static boolean isMatch(int x, int y) {
+        for (int i = 0; i < R; i++) {
+            for (int j = 0; j < C; j++) {
+                if (sticker[i][j] && board[x + i][y + j]) {
+                    return false;
+                }
             }
-//            System.out.println();
         }
-        System.out.println(cnt);
+
+        for (int i = 0; i < R; i++) {
+            for (int j = 0; j < C; j++) {
+                if (sticker[i][j]) {
+                    board[x + i][y + j] = true;
+                    ret++;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static void rotate() {
+        boolean[][] temp = new boolean[15][15];
+
+        for (int i = 0; i < R; i++) {
+            for (int j = 0; j < C; j++) {
+                temp[i][j] = sticker[i][j];
+            }
+        }
+
+        for (int i = 0; i < C; i++) {
+            for (int j = 0; j < R; j++) {
+                sticker[i][j] = temp[R - 1 - j][i];
+            }
+        }
+        int rot = C;
+        C = R;
+        R = rot;
     }
 }
