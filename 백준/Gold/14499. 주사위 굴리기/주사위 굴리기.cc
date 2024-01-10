@@ -1,4 +1,3 @@
-
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -33,7 +32,7 @@ void roll(int com){
 
   // 굴리는거 처리
   for(int i = 0; i < 4; i++)
-    tmp[idx[com][i]] = dice[idx[com][(i+1)%4]];
+    tmp[idx[com][(i+1)%4]] = dice[idx[com][i]];
 
   // 회전 결괏값을 기존 주사위에 대입
   for(int i = 1; i <= 6; ++i) dice[i]=tmp[i];
