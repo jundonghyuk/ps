@@ -1,5 +1,4 @@
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -17,26 +16,27 @@ public class Main {
             arr[i] = sc.nextInt();
         }
 
-        long l = 1;
-        long r = Arrays.stream(arr).max().getAsLong();
-        long ret = 0 ;
-        while(l <= r) {
-            long mid = (l + r) / 2;
-            if(check(arr, mid) >= m) {
-                ret = Math.max(ret, mid);
-                l = mid + 1;
-            }else {
-                r = mid - 1;
+        long lo = 1;
+        long hi = Arrays.stream(arr).max().getAsLong() + 1;
+        while (lo + 1 < hi) {
+            long mid = (lo + hi) / 2;
+            if (check(arr, mid, m)) {
+                lo = mid;
+            } else {
+                hi = mid;
             }
         }
-        System.out.println(ret);
+        System.out.println(lo);
     }
 
-    public static long check(long[] arr, long len) {
+    public static boolean check(long[] arr, long len, long m) {
         long cnt = 0;
         for (long num : arr) {
             cnt += (num / len);
         }
-        return  cnt;
+        if (cnt >= m) {
+            return true;
+        }
+        return false;
     }
 }
